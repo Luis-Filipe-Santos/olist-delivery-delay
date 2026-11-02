@@ -89,7 +89,7 @@ Análise de 96 mil pedidos entregues de um marketplace brasileiro (Olist, 2016�
 
 ## Limitações
 
-- **Só pedidos entregues.** Pedidos que nunca chegaram ficam fora, então o atraso real é maior que o medido.
+- **Só pedidos entregues.** Pedidos que nunca chegaram ficam fora, então o atraso real pode ser maior que o medido.
 - **Um único ciclo.** A janela do pico foi escolhida depois de ver os dados. Não há prova de sazonalidade.
 - **Associação, não causa.** A queda da nota vem junto com o atraso. Outros fatores (produto, embalagem) não foram controlados.
 - **A simulação é mecânica.** Ela assume que a entrega real e a nota não mudam com o prazo.
