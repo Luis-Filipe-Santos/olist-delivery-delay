@@ -9,6 +9,7 @@ Análise de 96 mil pedidos entregues de um marketplace brasileiro (Olist, 2016�
 - **O atraso se concentra em poucos lugares.** SP e RJ somam 51% dos pedidos atrasados. O RJ atrasa 12,1% dos pedidos, contra 4,5% de SP.
 - **O RJ tem um problema de pico. O Nordeste tem um problema fixo.** O RJ atrasa 4,3% fora do pico e 26,4% de nov/2017 a mar/2018. O Nordeste atrasa 9,3% mesmo fora do pico.
 - **A promessa de prazo não acompanhou a realidade no RJ.** Na crise, o tempo real subiu 8,8 dias e o prazo prometido subiu 3.
+- **Um prazo dinâmico (percentil móvel de 28 dias, por estado) não bateu o prazo atual.** Com o mesmo prazo médio prometido, o P90 e o P95 ficaram entre 0,3 pp a menos e 0,8 pp a mais de atraso. No RJ, a regra reagiu atrasada à crise.
 
 ## Dados
 
@@ -79,20 +80,53 @@ Análise de 96 mil pedidos entregues de um marketplace brasileiro (Olist, 2016�
 - 74% dos pedidos já chegam 8 ou mais dias antes do prazo. Dar dias extras a todos pune quem não precisa.
 - Quanto mais focado o cenário, mais cada prazo alterado rende, mas menor é o ganho total.
 
+### 5. Um prazo dinâmico não bateu o prazo atual (backtest)
+
+**Regra testada.** Para cada pedido, o prazo prometido é um percentil (P80, P85, P90 ou P95) do tempo real das entregas do mesmo estado nos 28 dias anteriores à compra, arredondado para cima. Só entram entregas feitas antes da data da compra. Estados com menos de 30 entregas na janela usam o percentil do país. O backtest cobre 93.800 pedidos, de mar/2017 a ago/2018.
+
+**Como comparar.** Um prazo maior sempre reduz o atraso. Por isso, o atraso de cada regra é comparado ao atraso que o prazo atual teria se fosse deslocado para todos os pedidos, de modo que o prazo médio prometido fosse igual.
+
+**Checagem.** O P90 de seis pedidos sorteados foi recalculado à mão. Os valores foram iguais e nenhuma entrega posterior à compra entrou na conta.
+
+![Backtest: atraso contra prazo médio prometido](images/05_backtest_curva.png)
+
+| Regra | Prazo médio prometido (dias) | Atraso | Atraso do prazo atual deslocado, no mesmo prazo médio | Diferença |
+|---|---|---|---|---|
+| Prazo atual (Olist) | 24,0 | 6,89% | | |
+| P80 móvel | 16,5 | 20,78% | 24,29% | -3,51 pp |
+| P85 móvel | 18,2 | 16,52% | 17,23% | -0,71 pp |
+| P90 móvel | 20,5 | 12,04% | 12,38% | -0,34 pp |
+| P95 móvel | 24,8 | 6,97% | 6,19% | +0,78 pp |
+
+- Com o mesmo prazo médio, a regra fica sobre a curva do prazo atual. O único ponto claramente abaixo dela é o P80, que opera com 1 em cada 5 pedidos atrasados. No P90 e no P95, a diferença é de -0,3 e +0,8 pp.
+- A regra erra a própria meta: o P80 atrasa 20,8% (meta 20%), o P85 16,5% (15%), o P90 12,0% (10%) e o P95 7,0% (5%). Uma causa provável é que os pedidos lentos ainda estão em trânsito quando o percentil é calculado e, por isso, não entram nele. Isso não foi testado.
+- O prazo atual já varia por região (de ≈ 20 dias em SP a ≈ 47 em AP, na média). A regra competiu contra um prazo que já tinha informação do estado.
+
+![RJ: atraso por mês, prazo atual contra prazo dinâmico](images/06_backtest_rj.png)
+
+- No RJ, a regra reagiu atrasada à crise. Em nov e dez/2017 ela prometeu 19,7 e 21,9 dias (a Olist: 22,8 e 28,8) e atrasou 33,9% e 39,1% (a Olist: 26,0% e 24,0%).
+- Em jan a mar/2018 a regra subiu o prazo para 33 a 37 dias, de 4 a 11 dias acima do prazo da Olist, e o atraso ficou abaixo (7,5%, 18,8% e 27,1%, contra 13,1%, 34,0% e 34,5%).
+- Em abr e mai/2018 a regra prometeu 40 e 44 dias para entregas que levavam 13 a 14 dias. O atraso foi de 1,7% e 0,6%, mas o custo desse prazo em vendas não está medido.
+- Nos meses calmos (mar a out/2017) a regra prometeu 18 a 21 dias (a Olist: 23 a 27) e atrasou 5,6% a 21,5% (a Olist: 2,8% a 6,9%).
+
+**Conclusão:** um percentil móvel de 28 dias não traz ganho claro sobre o prazo atual. O limite dele é a reação: em uma crise, os pedidos lentos só aparecem nos dados depois de entregues.
+
 ## Recomendações
 
 1. **Prometer o que dá para cumprir.** Cumprir o prazo importa mais que a velocidade.
-2. **Monitorar a folga por região** (prazo prometido menos prazo real). No RJ, o normal era ≈ 11 dias e a crise chegou a 5. Alertar quando a folga cair abaixo do normal da região.
+2. **Monitorar a folga por região** (prazo prometido menos prazo real), **incluindo pedidos ainda em trânsito** (idade do pedido contra o prazo). A folga calculada só com entregas reage tarde, como mostrou o backtest. No RJ, o normal era ≈ 11 dias e a crise chegou a 5. Esse alerta com pedidos em trânsito não foi testado aqui.
 3. **RJ:** plano de contingência para episódios de pico, acionado pelo alerta de folga (item 2) e não por calendário. Os dados mostram um único ciclo, então não dá para afirmar que o pico se repete em novembro.
 4. **Nordeste:** investigar rotas e rever o prazo de forma permanente.
-5. **Antes de mudar prazos em escala**, testar o efeito na conversão (teste A/B). A base não tem esse dado.
+5. **Não adotar um prazo por percentil móvel de 28 dias** com base nesta análise. O backtest não mostrou ganho sobre o prazo atual.
+6. **Antes de mudar prazos em escala**, testar o efeito na conversão (teste A/B). A base não tem esse dado.
 
 ## Limitações
 
 - **Só pedidos entregues.** Pedidos que nunca chegaram ficam fora, então o atraso real pode ser maior que o medido.
-- **Um único ciclo.** A janela do pico foi escolhida depois de ver os dados. Não há prova de sazonalidade.
+- **Um único ciclo.** A janela do pico foi escolhida depois de ver os dados, e o comportamento da regra em crise vem de uma só crise. Não há prova de sazonalidade.
 - **Associação, não causa.** A queda da nota vem junto com o atraso. Outros fatores (produto, embalagem) não foram controlados.
-- **A simulação é mecânica.** Ela assume que a entrega real e a nota não mudam com o prazo.
+- **As simulações são mecânicas.** A simulação de dias extras e o backtest assumem que a entrega real e a nota não mudam com o prazo.
+- **Backtest aproximado.** O atraso "no mesmo prazo médio" vem de interpolação linear sobre a curva do prazo atual deslocado, sem intervalo de confiança. As diferenças do P85, P90 e P95 (-0,7 a +0,8 pp) são pequenas e podem ser ruído.
 - **Sem transportadora e sem conversão.** A base não permite apontar o culpado do atraso nem medir o custo de prometer prazo maior.
 - **Mesmo estado contra interestadual:** o comparativo é dominado por SP e não entra nas conclusões.
 - **Estados pequenos** (RR, AP, AC) têm poucos pedidos e não sustentam conclusões.
@@ -110,21 +144,21 @@ pip install -r requirements.txt
 1. Baixe o dataset no Kaggle e coloque os 9 CSVs na pasta `data/`.
 2. `python src/load_data.py` carrega os CSVs no DuckDB.
 3. `python src/build_tabela.py` cria a tabela analítica (1 linha por pedido).
-4. Rode `notebooks/01_qualidade.ipynb` e depois `notebooks/02_analise_atraso.ipynb`.
+4. Rode os notebooks `01_qualidade.ipynb`, `02_analise_atraso.ipynb` e `03_backtest_prazo.ipynb`, nessa ordem.
 
 ## Estrutura
 
 ```
 ├── data/        # CSVs (não versionados)
 ├── images/      # gráficos usados neste README
-├── notebooks/   # 01 qualidade dos dados, 02 análise do atraso
+├── notebooks/   # 01 qualidade, 02 análise do atraso, 03 backtest do prazo
 ├── sql/         # 01_tabela_analitica.sql
 └── src/         # scripts de carga e de construção da tabela
 ```
 
 ## Próximos passos
 
-- Backtest de uma regra de prazo dinâmico (P90 do tempo real recente, por estado).
+- Testar um alerta de folga com pedidos em trânsito: quantos dias antes da crise de nov/2017 ele teria disparado no RJ?
 
 ## Licença e uso
 
