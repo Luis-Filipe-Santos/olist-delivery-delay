@@ -12,7 +12,7 @@ Análise de 96 mil pedidos entregues de um marketplace brasileiro (Olist, 2016�
 
 ## Dados
 
-- Fonte: [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) (Kaggle). A licença está na página do dataset.
+- Fonte: [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) (Kaggle). CC BY-NC-SA 4.0.
 - 9 tabelas CSV. Os dados brutos **não** estão neste repositório. Baixe do Kaggle (veja "Como reproduzir").
 - Pagamentos e geolocalização foram carregados, mas não entram nesta versão.
 - Escopo: pedidos `delivered` com data de entrega preenchida. São 96.470 de 99.441 pedidos (97%).
