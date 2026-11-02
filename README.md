@@ -12,7 +12,7 @@ Análise de 96 mil pedidos entregues de um marketplace brasileiro (Olist, 2016�
 
 ## Dados
 
-- Fonte: [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) (Kaggle). CC BY-NC-SA 4.0.
+- Fonte: [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) (Kaggle), licença [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). Os dados foram transformados nesta análise (agregados em 1 linha por pedido).
 - 9 tabelas CSV. Os dados brutos **não** estão neste repositório. Baixe do Kaggle (veja "Como reproduzir").
 - Pagamentos e geolocalização foram carregados, mas não entram nesta versão.
 - Escopo: pedidos `delivered` com data de entrega preenchida. São 96.470 de 99.441 pedidos (97%).
@@ -125,6 +125,11 @@ pip install -r requirements.txt
 ## Próximos passos
 
 - Backtest de uma regra de prazo dinâmico (P90 do tempo real recente, por estado).
+
+## Licença e uso
+
+- Os dados pertencem à Olist e seguem a licença CC BY-NC-SA 4.0: exigem crédito, proíbem uso comercial e pedem que obras derivadas usem a mesma licença.
+- O texto e os gráficos desta análise seguem a mesma licença ([CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)). Este repositório serve para estudo e portfólio.
 
 ## Autor
 
