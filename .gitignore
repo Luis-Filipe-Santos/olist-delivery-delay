@@ -1,0 +1,6 @@
+.venv/
+data/*
+!data/.gitkeep
+*.duckdb
+.ipynb_checkpoints/
+__pycache__/
