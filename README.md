@@ -83,7 +83,7 @@ Análise de 96 mil pedidos entregues de um marketplace brasileiro (Olist, 2016�
 
 1. **Prometer o que dá para cumprir.** Cumprir o prazo importa mais que a velocidade.
 2. **Monitorar a folga por região** (prazo prometido menos prazo real). No RJ, o normal era ≈ 11 dias e a crise chegou a 5. Alertar quando a folga cair abaixo do normal da região.
-3. **RJ:** plano de contingência para o pico, com revisão de capacidade de transporte antes de nov.
+3. **RJ:** plano de contingência para episódios de pico, acionado pelo alerta de folga (item 2) e não por calendário. Os dados mostram um único ciclo, então não dá para afirmar que o pico se repete em novembro.
 4. **Nordeste:** investigar rotas e rever o prazo de forma permanente.
 5. **Antes de mudar prazos em escala**, testar o efeito na conversão (teste A/B). A base não tem esse dado.
 
@@ -100,7 +100,7 @@ Análise de 96 mil pedidos entregues de um marketplace brasileiro (Olist, 2016�
 ## Como reproduzir
 
 ```
-git clone https://github.com/SEU_USUARIO/olist-delivery-delay.git
+git clone https://github.com/Luis-Filipe-Santos/olist-delivery-delay.git
 cd olist-delivery-delay
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1        # Linux/macOS: source .venv/bin/activate
@@ -128,4 +128,4 @@ pip install -r requirements.txt
 
 ## Autor
 
-Seu Nome · [LinkedIn](https://www.linkedin.com/in/luis-filipe-santos-silva)
+Luis Filipe Santos Silva · [LinkedIn](https://www.linkedin.com/in/luis-filipe-santos-silva)
